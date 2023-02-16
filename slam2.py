@@ -51,8 +51,8 @@ def generate_launch_description():
         ),
         Node(
             package='imu_filter_madgwick',
-            node_executable='imu_filter_madgwick_node',
-            node_name='ImuFilter',
+            executable='imu_filter_madgwick_node',
+            name='ImuFilter',
             parameters=[{'use_mag': False, '_publish_tf': False, '_world_frame': 'enu'}],
             remappings=[
                 ('/imu/data_raw', '/camera/imu')
@@ -61,7 +61,7 @@ def generate_launch_description():
         ),
         Node(
             package='realsense2_camera',
-            node_executable='realsense2_camera_node',
+            executable='realsense2_camera_node',
             node_name='realsense2_camera_node',
             namespace='camera',
             parameters=[{'enable_gyro': True, 'enable_pose': True, 'enable_accel': True, 'unite_imu_method': 2, 'pointcloud.enable': True, 'pointcloud.stream_filter': 2, 'align_depth.enable': True, 'linear_accel_cov': 1.0,
