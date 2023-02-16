@@ -62,7 +62,7 @@ def generate_launch_description():
         Node(
             package='realsense2_camera',
             executable='realsense2_camera_node',
-            node_name='realsense2_camera_node',
+            name='realsense2_camera_node',
             namespace='camera',
             parameters=[{'enable_gyro': True, 'enable_pose': True, 'enable_accel': True, 'unite_imu_method': 2, 'pointcloud.enable': True, 'pointcloud.stream_filter': 2, 'align_depth.enable': True, 'linear_accel_cov': 1.0,
                 'rgb_camera.enable_auto_exposure': False,
