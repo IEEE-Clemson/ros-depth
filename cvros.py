@@ -1,13 +1,15 @@
 import rclpy
+import tf2_ros
 from rclpy.node import Node
 import numpy as np
-
+import ros2_numpy as rnp
 from std_msgs.msg import String
-
+import pcl
 from cv_bridge import CvBridge
 import cv2 as cv
 from sensor_msgs.msg import Image
 import math
+from sensor_msgs.msg import PointCloud2
 
 def generate_gradient(rows, cols):
     # Generate vertical gradient ranging from -1 to 1
@@ -18,9 +20,10 @@ def generate_gradient(rows, cols):
 class MinimalPublisher(Node):
     def __init__(self):
         super().__init__('minimal_publisher')
-        self.publisher_ = self.create_publisher(String, 'topic', 10)
-        self.subscriber = self.create_subscription(Image, '/camera/depth/image_rect_raw', self.depth_callback, 10)
-        self.subscriber2 = self.create_subscription(Image, '/camera/color/image_raw', self.color_callback, 10)
+        self.publisher_ = self.create_publisher(PointCloud2, '/mycloud', 10)
+        # self.subscriber = self.create_subscription(Image, '/camera/depth/image_rect_raw', self.depth_callback, 10)
+        # self.subscriber2 = self.create_subscription(Image, '/camera/color/image_raw', self.color_callback, 10)
+        self.pc_sub = self.create_subscription(PointCloud2, '/camera/depth/color/points', self.pointcloud_callback, 10)
         self.br = CvBridge()
         self.image = np.array([])
         self.hasImage = False
@@ -44,6 +47,10 @@ class MinimalPublisher(Node):
         self.image = self.br.imgmsg_to_cv2(msg)
         self.hasImage = True
 
+    def pointcloud_callback(self, msg: PointCloud2):
+        pc_np = rnp.point_cloud2.get_xyz_points(msg, True)
+        pc = pcl.PointCloud(np.array(pc_np, dtype=np.float32))
+        seg = pcl.Segmentation()
 
 
 def main(args=None):
